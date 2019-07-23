@@ -1,11 +1,11 @@
-import { PostReactionModel, PostModel } from '../models/index';
+import { PostReactionDislikeModel, PostModel } from '../models/index';
 import BaseRepository from './base.repository';
 
-class PostReactionRepository extends BaseRepository {
+class PostReactionDislikeRepository extends BaseRepository {
     getPostReaction(userId, postId) {
         return this.model.findOne({
             group: [
-                'postReaction.id',
+                'postReactionDislike.id',
                 'post.id'
             ],
             where: { userId, postId },
@@ -17,4 +17,4 @@ class PostReactionRepository extends BaseRepository {
     }
 }
 
-export default new PostReactionRepository(PostReactionModel);
+export default new PostReactionDislikeRepository(PostReactionDislikeModel);

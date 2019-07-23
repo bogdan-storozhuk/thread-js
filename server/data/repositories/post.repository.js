@@ -1,8 +1,9 @@
 import sequelize from '../db/connection';
-import { PostModel, CommentModel, UserModel, ImageModel, PostReactionModel } from '../models/index';
+import { PostModel, CommentModel, UserModel, ImageModel, PostReactionLikeModel,PostReactionDislikeModel } from '../models/index';
 import BaseRepository from './base.repository';
 
 const likeCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
+const dislikeCase = bool => `CASE WHEN "postReactions"."isDislike" = ${bool} THEN 1 ELSE 0 END`;
 
 class PostRepository extends BaseRepository {
     async getPosts(filter) {
@@ -40,7 +41,7 @@ class PostRepository extends BaseRepository {
                     attributes: ['id', 'link']
                 }
             }, {
-                model: PostReactionModel,
+                model: PostReactionLikeModel,
                 attributes: [],
                 duplicating: false
             }],

@@ -2,7 +2,8 @@ export default (models) => {
     const {
         User,
         Post,
-        PostReaction,
+        PostReactionLike,
+        PostReactionDislike,
         Comment,
         Image
     } = models;
@@ -13,17 +14,21 @@ export default (models) => {
 
     User.hasMany(Post);
     User.hasMany(Comment);
-    User.hasMany(PostReaction);
+    User.hasMany(PostReactionLike);
+    User.hasMany(PostReactionDislike);
     User.belongsTo(Image);
 
     Post.belongsTo(Image);
     Post.belongsTo(User);
-    Post.hasMany(PostReaction);
+    Post.hasMany(PostReactionLike);
+    Post.hasMany(PostReactionDislike);
     Post.hasMany(Comment);
 
     Comment.belongsTo(User);
     Comment.belongsTo(Post);
 
-    PostReaction.belongsTo(Post);
-    PostReaction.belongsTo(User);
+    PostReactionLike.belongsTo(Post);
+    PostReactionLike.belongsTo(User);
+    PostReactionDislike.belongsTo(Post);
+    PostReactionDislike.belongsTo(User);
 };

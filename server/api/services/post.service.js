@@ -1,5 +1,6 @@
 import postRepository from '../../data/repositories/post.repository';
-import postReactionRepository from '../../data/repositories/post-reaction.repository';
+import postReactionLikeRepository from '../../data/repositories/post-reaction-like.repository';
+import postReactionDislikeRepository from '../../data/repositories/post-reaction-dislike.repository';
 
 export const getPosts = filter => postRepository.getPosts(filter);
 
@@ -10,18 +11,35 @@ export const create = (userId, post) => postRepository.create({
     userId
 });
 
-export const setReaction = async (userId, { postId, isLike = true }) => {
+export const setReactionLike = async (userId, { postId, isLike = true }) => {
     // define the callback for future use as a promise
     const updateOrDelete = react => (react.isLike === isLike
-        ? postReactionRepository.deleteById(react.id)
-        : postReactionRepository.updateById(react.id, { isLike }));
+        ? postReactionLikeRepository.deleteById(react.id)
+        : postReactionLikeRepository.updateById(react.id, { isLike }));
 
-    const reaction = await postReactionRepository.getPostReaction(userId, postId);
+    const reaction = await postReactionLikeRepository.getPostReaction(userId, postId);
 
     const result = reaction
         ? await updateOrDelete(reaction)
-        : await postReactionRepository.create({ userId, postId, isLike });
+        : await postReactionLikeRepository.create({ userId, postId, isLike });
 
     // the result is an integer when an entity is deleted
-    return Number.isInteger(result) ? {} : postReactionRepository.getPostReaction(userId, postId);
+    return Number.isInteger(result) ? {} : postReactionLikeRepository.getPostReaction(userId, postId);
 };
+
+export const setReactionDislike = async (userId, { postId, isDislike = true }) => {
+    // define the callback for future use as a promise
+    const updateOrDelete = react => (react.isDislike  === isDislike 
+        ? postReactionDislikeRepository.deleteById(react.id)
+        : postReactionDislikeRepository.updateById(react.id, { isDislike }));
+
+    const reaction = await postReactionDislikeRepository.getPostReaction(userId, postId);
+
+    const result = reaction
+        ? await updateOrDelete(reaction)
+        : await postReactionDislikeRepository.create({ userId, postId, isDislike  });
+
+    // the result is an integer when an entity is deleted
+    return Number.isInteger(result) ? {} : postReactionDislikeRepository.getPostReaction(userId, postId);
+};
+

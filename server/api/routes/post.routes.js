@@ -16,7 +16,7 @@ router
             return res.send(post);
         })
         .catch(next))
-    .put('/react', (req, res, next) => postService.setReaction(req.user.id, req.body) // user added to the request in the jwt strategy, see passport config
+    .put('/reactLike', (req, res, next) => postService.setReactionLike(req.user.id, req.body) // user added to the request in the jwt strategy, see passport config
         .then((reaction) => {
             if (reaction.post && (reaction.post.userId !== req.user.id)) {
                 // notify a user if someone (not himself) liked his post
@@ -24,6 +24,16 @@ router
             }
             return res.send(reaction);
         })
-        .catch(next));
+        .catch(next))
+        .put('/reactDislike', (req, res, next) => postService.setReactionDislike(req.user.id, req.body) // user added to the request in the jwt strategy, see passport config
+        .then((reaction) => {
+            if (reaction.post && (reaction.post.userId !== req.user.id)) {
+                // notify a user if someone (not himself) liked his post
+                req.io.to(reaction.post.userId).emit('dislike', 'Your post was disliked!');
+            }
+            return res.send(reaction);
+        })
+        .catch(next))
+        
 
 export default router;

@@ -3,14 +3,16 @@ import associate from '../db/associations';
 
 const User = orm.import('./user');
 const Post = orm.import('./post');
-const PostReaction = orm.import('./post-reaction');
+const PostReactionLike = orm.import('./postreactionlike.js');
+const PostReactionDislike = orm.import('./postreactiondislike.js');
 const Comment = orm.import('./comment');
 const Image = orm.import('./image');
 
 associate({
     User,
     Post,
-    PostReaction,
+    PostReactionLike,
+    PostReactionDislike,
     Comment,
     Image
 });
@@ -18,7 +20,8 @@ associate({
 export {
     User as UserModel,
     Post as PostModel,
-    PostReaction as PostReactionModel,
+    PostReactionLike as PostReactionLikeModel,
+    PostReactionDislike as PostReactionDislikeModel,
     Comment as CommentModel,
     Image as ImageModel
 };
